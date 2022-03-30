@@ -1,0 +1,6 @@
+[
+    {
+      "name": "container",
+      "imageUri": "public.ecr.aws/n2v3l2l8/html-nginx:latest"
+    }
+  ]

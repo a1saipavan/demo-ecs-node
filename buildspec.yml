@@ -1,0 +1,22 @@
+---
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      #- $(aws ecr get-login --no-include-email --region ap-south-1)
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/n2v3l2l8
+  build:
+    commands:
+      - "echo Build started on `date`"
+      - "echo Building the Docker image..."
+      - "docker build -t html-nginx ."
+      - "docker tag html-nginx:latest public.ecr.aws/n2v3l2l8/html-nginx:latest"
+  post_build:
+    commands:
+      - "echo Build completed on `date`"
+      - "echo Pushing the Docker image..."
+      - "docker push public.ecr.aws/n2v3l2l8/html-nginx:latest"
+      - printf '[{"name":"container","imageUri":"%s"}]' public.ecr.aws/n2v3l2l8/html-nginx:latest > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
